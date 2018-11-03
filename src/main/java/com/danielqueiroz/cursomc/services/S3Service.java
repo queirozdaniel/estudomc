@@ -27,7 +27,7 @@ public class S3Service {
 
 	public URI uploadFile(MultipartFile multipartFile) {
 		try {
-			String fileName = multipartFile.getName();
+			String fileName = multipartFile.getOriginalFilename();
 			InputStream is = multipartFile.getInputStream();
 			String contentType = multipartFile.getContentType();
 			return uploadFile(is, fileName, contentType);
