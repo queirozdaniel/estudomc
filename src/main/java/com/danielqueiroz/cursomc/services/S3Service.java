@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.danielqueiroz.cursomc.services.exceptions.FileException;
 
 @Service
 public class S3Service {
@@ -31,7 +32,7 @@ public class S3Service {
 			String contentType = multipartFile.getContentType();
 			return uploadFile(is, fileName, contentType);
 		} catch (IOException e) {
-			throw new RuntimeException("Erro de IO: " + e.getMessage());			
+			throw new FileException("Erro de IO: " + e.getMessage());			
 		}
 	}
 
@@ -43,11 +44,11 @@ public class S3Service {
 			meta.setContentType(contentType);
 			s3client.putObject(bucketName, fileName, is, meta);
 
-			LOG.info("Upload finalizado!");
+			LOG.info("Upload finalizado! filename is " + fileName);
 
 			return s3client.getUrl(bucketName, fileName).toURI();
 		} catch (URISyntaxException e) {
-			throw new RuntimeException("Erro ao gerar a Uri");
+			throw new FileException("Erro ao gerar a Uri");
 		}
 	}
 
